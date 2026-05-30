@@ -1,0 +1,39 @@
+body{
+    background: linear-gradient(135deg,#f5f7fa,#c3cfe2);
+    min-height: 100vh;
+}
+
+.container{
+    max-width: 700px;
+}
+
+.card{
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+h1{
+    font-weight: bold;
+    color: #333;
+}
+
+.preview-img{
+    max-width: 100%;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn{
+    border-radius: 10px;
+}
+
+.form-control,
+.form-select{
+    border-radius: 10px;
+}
+
+.download-btn{
+    margin-top: 15px;
+}
