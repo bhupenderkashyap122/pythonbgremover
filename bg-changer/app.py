@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, send_file
 from PIL import Image
-from rembg import remove
 import os
 
 app = Flask(__name__)
@@ -19,12 +18,12 @@ def home():
 def process():
 
     if "image" not in request.files:
-        return "No image uploaded"
+        return render_template("index.html", error="Please upload an image")
 
     file = request.files["image"]
 
     if file.filename == "":
-        return "No file selected"
+        return render_template("index.html", error="Please select an image")
 
     color = request.form.get("color", "white")
 
@@ -36,21 +35,22 @@ def process():
     try:
         img = Image.open(input_path).convert("RGBA")
 
-        removed = remove(img)
+        background = Image.new("RGBA", img.size, color)
+        background.paste(img, (0, 0), img)
 
-        bg = Image.new("RGBA", removed.size, color)
-
-        final = Image.alpha_composite(bg, removed)
-
-        final.save(output_path)
+        background.save(output_path)
 
         return render_template(
             "index.html",
-            image="result.png"
+            image="result.png",
+            success="Image processed successfully!"
         )
 
     except Exception as e:
-        return f"Error: {str(e)}"
+        return render_template(
+            "index.html",
+            error=f"Error: {str(e)}"
+        )
 
 @app.route("/download")
 def download():
@@ -68,7 +68,8 @@ def download():
 
 @app.route("/health")
 def health():
-    return "Website Working Successfully"
+    return "OK"
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
